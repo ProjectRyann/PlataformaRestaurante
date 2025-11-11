@@ -1,21 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
 export class LoginComponent implements OnInit {
 
-  formularioLoginCliente!: FormGroup;
-  formularioRegistroCliente!: FormGroup;
+  // Modelos para template-driven forms
+  loginModel = {
+    email: '',
+    contrasena: ''
+  };
+
+  registerModel = {
+    nombre: '',
+    apellido: '',
+    email: '',
+    contrasena: ''
+  };
 
   vistaActual: 'login-cliente' | 'registro-cliente' = 'login-cliente';
   cargando = false;
@@ -25,12 +35,9 @@ export class LoginComponent implements OnInit {
   mostrarPasswordRegistro = false;
 
   constructor(
-    private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
-  ) {
-    this.inicializarFormularios();
-  }
+  ) {}
 
   ngOnInit(): void {
     // Si ya hay un usuario autenticado, redirigir
@@ -44,21 +51,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  private inicializarFormularios(): void {
-    this.formularioLoginCliente = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      contraseña: ['', [Validators.required, Validators.minLength(6)]]
-    });
-
-    this.formularioRegistroCliente = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      contraseña: ['', [Validators.required, Validators.minLength(6)]],
-      nombre: [''],
-      apellido: ['']
-    });
-
-    // No hay formulario de login por contraseña para admin: el acceso de admin se realiza solo por Google
-  }
+  // No usamos Reactive Forms: template-driven con ngModel
 
   cambiarVista(vista: 'login-cliente' | 'registro-cliente'): void {
     this.vistaActual = vista;
@@ -94,7 +87,9 @@ export class LoginComponent implements OnInit {
   }
 
   async loginClienteCorreo(): Promise<void> {
-    if (this.formularioLoginCliente.invalid) {
+    // Validación básica en cliente (se confía en la validación del formulario en plantilla)
+    if (!this.loginModel.email || this.loginModel.contrasena.length < 6) {
+      this.mensajeError = 'Ingresa correo y contraseña válidos (mín. 6 caracteres)';
       return;
     }
 
@@ -102,8 +97,7 @@ export class LoginComponent implements OnInit {
     this.mensajeError = '';
 
     try {
-      const { email, contraseña } = this.formularioLoginCliente.value;
-      await this.authService.iniciarSesionConCorreo(email, contraseña);
+  await this.authService.iniciarSesionConCorreo(this.loginModel.email, this.loginModel.contrasena);
       
       const usuario = this.authService.obtenerUsuarioActual();
       if (usuario?.rol !== 'cliente') {
@@ -122,7 +116,9 @@ export class LoginComponent implements OnInit {
   }
 
   async registroClienteCorreo(): Promise<void> {
-    if (this.formularioRegistroCliente.invalid) {
+    // Validación básica
+    if (!this.registerModel.email || this.registerModel.contrasena.length < 6) {
+      this.mensajeError = 'Ingresa un correo válido y una contraseña (mín. 6 caracteres)';
       return;
     }
 
@@ -130,13 +126,11 @@ export class LoginComponent implements OnInit {
     this.mensajeError = '';
 
     try {
-      const { email, contraseña, nombre, apellido } = this.formularioRegistroCliente.value;
-      
       await this.authService.registrarConCorreo(
-        email,
-        contraseña,
+        this.registerModel.email,
+        this.registerModel.contrasena,
         'cliente',
-        { nombre, apellido }
+        { nombre: this.registerModel.nombre, apellido: this.registerModel.apellido }
       );
 
       this.router.navigate(['/cliente']);
