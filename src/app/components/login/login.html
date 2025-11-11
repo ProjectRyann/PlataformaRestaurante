@@ -19,7 +19,7 @@
       </button>
     </div>
 
-    <!-- LOGIN CLIENTE -->
+    <!-- login para el cliente -->
     <div class="tab-content" *ngIf="vistaActual === 'login-cliente'">
       <div class="auth-buttons">
         <button class="btn-google" (click)="iniciarSesionGoogle()" [disabled]="cargando">
@@ -29,17 +29,21 @@
 
       <div class="divider">O</div>
 
-      <form [formGroup]="formularioLoginCliente" (ngSubmit)="loginClienteCorreo()" class="form-login">
+      <form #loginForm="ngForm" (ngSubmit)="loginClienteCorreo()" class="form-login">
         <div class="form-group">
           <label for="email-cliente">Correo</label>
           <input 
             type="email" 
             id="email-cliente"
-            formControlName="email" 
+            [(ngModel)]="loginModel.email"
+            name="loginEmail"
+            #loginEmail="ngModel"
+            required
+            email
             placeholder="tu@correo.com"
             class="form-control">
-          <span class="error" *ngIf="formularioLoginCliente.get('email')?.hasError('required') && formularioLoginCliente.get('email')?.touched">
-            El correo es requerido
+          <span class="error" *ngIf="loginEmail.invalid && loginEmail.touched">
+            El correo es requerido y debe ser válido
           </span>
         </div>
 
@@ -48,7 +52,11 @@
           <input 
             [type]="mostrarPasswordCliente ? 'text' : 'password'" 
             id="password-cliente"
-            formControlName="contraseña" 
+            [(ngModel)]="loginModel.contrasena"
+            name="loginPassword"
+            #loginPass="ngModel"
+            required
+            minlength="6"
             placeholder="••••••••"
             class="form-control">
           <button 
@@ -57,12 +65,12 @@
             (click)="mostrarPasswordCliente = !mostrarPasswordCliente">
             {{ mostrarPasswordCliente ? '👁️‍🗨️' : '👁️' }}
           </button>
-          <span class="error" *ngIf="formularioLoginCliente.get('contraseña')?.hasError('required') && formularioLoginCliente.get('contraseña')?.touched">
-            La contraseña es requerida
+          <span class="error" *ngIf="loginPass.invalid && loginPass.touched">
+            La contraseña es requerida (mín. 6 caracteres)
           </span>
         </div>
 
-        <button type="submit" class="btn-login" [disabled]="cargando || !formularioLoginCliente.valid">
+        <button type="submit" class="btn-login" [disabled]="cargando || !loginForm.form.valid">
           {{ cargando ? '🔄 Cargando...' : '✓ Ingresar' }}
         </button>
       </form>
@@ -76,13 +84,14 @@
 
     <!-- REGISTRO CLIENTE -->
     <div class="tab-content" *ngIf="vistaActual === 'registro-cliente'">
-      <form [formGroup]="formularioRegistroCliente" (ngSubmit)="registroClienteCorreo()" class="form-login">
+      <form #regForm="ngForm" (ngSubmit)="registroClienteCorreo()" class="form-login">
         <div class="form-group">
           <label for="nombre">Nombre</label>
           <input 
             type="text" 
             id="nombre"
-            formControlName="nombre" 
+            [(ngModel)]="registerModel.nombre"
+            name="regNombre"
             placeholder="Juan"
             class="form-control">
         </div>
@@ -92,7 +101,8 @@
           <input 
             type="text" 
             id="apellido"
-            formControlName="apellido" 
+            [(ngModel)]="registerModel.apellido"
+            name="regApellido"
             placeholder="Pérez"
             class="form-control">
         </div>
@@ -102,11 +112,15 @@
           <input 
             type="email" 
             id="email-registro"
-            formControlName="email" 
+            [(ngModel)]="registerModel.email"
+            name="regEmail"
+            #regEmail="ngModel"
+            required
+            email
             placeholder="tu@correo.com"
             class="form-control">
-          <span class="error" *ngIf="formularioRegistroCliente.get('email')?.hasError('required') && formularioRegistroCliente.get('email')?.touched">
-            El correo es requerido
+          <span class="error" *ngIf="regEmail.invalid && regEmail.touched">
+            El correo es requerido y debe ser válido
           </span>
         </div>
 
@@ -115,7 +129,11 @@
           <input 
             [type]="mostrarPasswordRegistro ? 'text' : 'password'" 
             id="contraseña-registro"
-            formControlName="contraseña" 
+            [(ngModel)]="registerModel.contrasena"
+            name="regPassword"
+            #regPass="ngModel"
+            required
+            minlength="6"
             placeholder="••••••••"
             class="form-control">
           <button 
@@ -124,12 +142,12 @@
             (click)="mostrarPasswordRegistro = !mostrarPasswordRegistro">
             {{ mostrarPasswordRegistro ? '👁️‍🗨️' : '👁️' }}
           </button>
-          <span class="error" *ngIf="formularioRegistroCliente.get('contraseña')?.hasError('required') && formularioRegistroCliente.get('contraseña')?.touched">
-            La contraseña es requerida
+          <span class="error" *ngIf="regPass.invalid && regPass.touched">
+            La contraseña es requerida (mín. 6 caracteres)
           </span>
         </div>
 
-        <button type="submit" class="btn-login" [disabled]="cargando || !formularioRegistroCliente.valid">
+        <button type="submit" class="btn-login" [disabled]="cargando || !regForm.form.valid">
           {{ cargando ? '🔄 Cargando...' : '✓ Registrarse' }}
         </button>
       </form>
@@ -139,6 +157,5 @@
       </div>
     </div>
 
-    <!-- Nota: el acceso de administrador se realiza únicamente mediante Google y verificación del correo -->
   </div>
 </div>
