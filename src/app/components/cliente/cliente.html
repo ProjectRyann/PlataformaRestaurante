@@ -1,0 +1,74 @@
+<div class="cliente-container">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <h2>🍽️ Sabor Criollo - Cliente</h2>
+    </div>
+    <div class="user-info">
+      <span class="usuario-nombre">{{ usuario?.nombre || usuario?.email }}</span>
+      <button (click)="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div class="welcome-section">
+      <h1>Bienvenido, {{ usuario?.nombre }}! 👋</h1>
+      <p>Aquí puedes consultar el menú, hacer pedidos y seguir tu estado.</p>
+    </div>
+
+    <div class="menu-section">
+      <h2>📋 Menú del Día</h2>
+      <div class="menu-grid">
+        <div class="menu-item" *ngFor="let producto of productos">
+          <div class="item-image">{{ producto.imagen }}</div>
+          <div class="item-info">
+            <h3>{{ producto.nombre }}</h3>
+            <p class="categoria">{{ producto.categoria }}</p>
+            <p class="descripcion">{{ producto.descripcion }}</p>
+            <div class="item-footer">
+              <span class="precio">${{ producto.precio }}</span>
+              <button (click)="agregarAlCarrito(producto)" class="btn-agregar">
+                🛒 Agregar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-section" *ngIf="carrito.length > 0">
+      <h2>🛒 Mi Carrito</h2>
+      <div class="cart-items">
+        <div class="cart-item" *ngFor="let item of carrito; let i = index">
+          <span>{{ item.nombre }} x{{ item.cantidad }}</span>
+          <span class="subtotal">${{ item.precio * item.cantidad }}</span>
+          <button (click)="eliminarDelCarrito(i)" class="btn-eliminar">❌</button>
+        </div>
+      </div>
+      <div class="cart-total">
+        <strong>Total: ${{ calcularTotal() }}</strong>
+        <button (click)="confirmarPedido()" class="btn-confirmar">
+          ✓ Confirmar Pedido
+        </button>
+      </div>
+    </div>
+
+    <div class="orders-section">
+      <h2>📦 Mis Pedidos</h2>
+      <div class="orders-list">
+        <div class="order-card" *ngFor="let pedido of pedidos">
+          <div class="order-header">
+            <span class="order-id">#{{ pedido.id }}</span>
+            <span class="order-status" [ngClass]="'status-' + pedido.estado">
+              {{ pedido.estado }}
+            </span>
+          </div>
+          <p>Total: <strong>${{ pedido.total }}</strong></p>
+          <p>Fecha: {{ pedido.fecha | date: 'short' }}</p>
+          <button (click)="agregarComentario(pedido.id)" class="btn-comentario">
+            💬 Dejar comentario
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
