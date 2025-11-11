@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AuthService, Usuario } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -27,7 +28,7 @@ interface Pedido {
 @Component({
   selector: 'app-cliente',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './cliente.html',
   styleUrl: './cliente.css'
 })
