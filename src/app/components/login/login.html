@@ -1,0 +1,144 @@
+<div class="login-container">
+  <div class="login-box">
+    <div class="login-header">
+      <h1>🍽️ Sabor Criollo</h1>
+      <p>Bienvenido a nuestro sistema</p>
+    </div>
+
+    <div class="error-message" *ngIf="mensajeError">
+      <span>{{ mensajeError }}</span>
+    </div>
+
+    <!-- Tabs para cliente/admin -->
+    <div class="tabs">
+      <button 
+        class="tab" 
+        [class.active]="vistaActual === 'login-cliente'"
+        (click)="cambiarVista('login-cliente')">
+        🧑‍💼 Cliente
+      </button>
+    </div>
+
+    <!-- LOGIN CLIENTE -->
+    <div class="tab-content" *ngIf="vistaActual === 'login-cliente'">
+      <div class="auth-buttons">
+        <button class="btn-google" (click)="iniciarSesionGoogle()" [disabled]="cargando">
+          <span>🔐</span> Iniciar sesión con Google
+        </button>
+      </div>
+
+      <div class="divider">O</div>
+
+      <form [formGroup]="formularioLoginCliente" (ngSubmit)="loginClienteCorreo()" class="form-login">
+        <div class="form-group">
+          <label for="email-cliente">Correo</label>
+          <input 
+            type="email" 
+            id="email-cliente"
+            formControlName="email" 
+            placeholder="tu@correo.com"
+            class="form-control">
+          <span class="error" *ngIf="formularioLoginCliente.get('email')?.hasError('required') && formularioLoginCliente.get('email')?.touched">
+            El correo es requerido
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="password-cliente">Contraseña</label>
+          <input 
+            [type]="mostrarPasswordCliente ? 'text' : 'password'" 
+            id="password-cliente"
+            formControlName="contraseña" 
+            placeholder="••••••••"
+            class="form-control">
+          <button 
+            type="button" 
+            class="btn-toggle-password"
+            (click)="mostrarPasswordCliente = !mostrarPasswordCliente">
+            {{ mostrarPasswordCliente ? '👁️‍🗨️' : '👁️' }}
+          </button>
+          <span class="error" *ngIf="formularioLoginCliente.get('contraseña')?.hasError('required') && formularioLoginCliente.get('contraseña')?.touched">
+            La contraseña es requerida
+          </span>
+        </div>
+
+        <button type="submit" class="btn-login" [disabled]="cargando || !formularioLoginCliente.valid">
+          {{ cargando ? '🔄 Cargando...' : '✓ Ingresar' }}
+        </button>
+      </form>
+
+      <div class="toggle-form">
+        <p>¿No tienes cuenta? 
+          <a (click)="cambiarVista('registro-cliente')" class="link">Regístrate aquí</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- REGISTRO CLIENTE -->
+    <div class="tab-content" *ngIf="vistaActual === 'registro-cliente'">
+      <form [formGroup]="formularioRegistroCliente" (ngSubmit)="registroClienteCorreo()" class="form-login">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input 
+            type="text" 
+            id="nombre"
+            formControlName="nombre" 
+            placeholder="Juan"
+            class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="apellido">Apellido</label>
+          <input 
+            type="text" 
+            id="apellido"
+            formControlName="apellido" 
+            placeholder="Pérez"
+            class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="email-registro">Correo</label>
+          <input 
+            type="email" 
+            id="email-registro"
+            formControlName="email" 
+            placeholder="tu@correo.com"
+            class="form-control">
+          <span class="error" *ngIf="formularioRegistroCliente.get('email')?.hasError('required') && formularioRegistroCliente.get('email')?.touched">
+            El correo es requerido
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="contraseña-registro">Contraseña</label>
+          <input 
+            [type]="mostrarPasswordRegistro ? 'text' : 'password'" 
+            id="contraseña-registro"
+            formControlName="contraseña" 
+            placeholder="••••••••"
+            class="form-control">
+          <button 
+            type="button" 
+            class="btn-toggle-password"
+            (click)="mostrarPasswordRegistro = !mostrarPasswordRegistro">
+            {{ mostrarPasswordRegistro ? '👁️‍🗨️' : '👁️' }}
+          </button>
+          <span class="error" *ngIf="formularioRegistroCliente.get('contraseña')?.hasError('required') && formularioRegistroCliente.get('contraseña')?.touched">
+            La contraseña es requerida
+          </span>
+        </div>
+
+        <button type="submit" class="btn-login" [disabled]="cargando || !formularioRegistroCliente.valid">
+          {{ cargando ? '🔄 Cargando...' : '✓ Registrarse' }}
+        </button>
+      </form>
+
+      <div class="toggle-form">
+        <p><a (click)="cambiarVista('login-cliente')" class="link">Volver al login</a></p>
+      </div>
+    </div>
+
+    <!-- Nota: el acceso de administrador se realiza únicamente mediante Google y verificación del correo -->
+  </div>
+</div>
