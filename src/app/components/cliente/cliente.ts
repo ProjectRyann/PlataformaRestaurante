@@ -110,7 +110,7 @@ export class ClienteComponent implements OnInit {
   }
 
   private cargarPedidos(): void {
-    // Datos de ejemplo - En producción, estos vendrían de Firebase
+    // Datos de ejemplo 
     this.pedidos = [
       {
         id: 'PED001',

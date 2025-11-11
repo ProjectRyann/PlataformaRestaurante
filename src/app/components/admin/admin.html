@@ -1,0 +1,50 @@
+<div class="admin-container">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <h2>👨‍💼 Panel de Administrador</h2>
+    </div>
+    <div class="user-info">
+      <span class="usuario-nombre">{{ usuario?.nombre || usuario?.email }}</span>
+      <button (click)="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
+    </div>
+  </nav>
+
+  <div class="content">
+    <div class="welcome-section">
+      <div class="welcome-card">
+        <h1>Bienvenido, {{ usuario?.nombre }}! 👋</h1>
+        <p>Sistema de Administración - Sabor Criollo S.A.S</p>
+      </div>
+    </div>
+
+    <div class="dashboard-info">
+      <p class="info-text">
+        ✓ Has iniciado sesión correctamente como administrador.
+      </p>
+      <p class="info-text">
+        El módulo de administración está en desarrollo.
+      </p>
+      <p class="construction-message">
+        🚧 Próximamente: Gestión de menú, pedidos, estadísticas y más.
+      </p>
+    </div>
+
+    <div class="placeholder-modules">
+      <div class="module-card">
+        <div class="module-icon">📋</div>
+        <h3>Gestión de Menú</h3>
+        <p>Próximamente disponible</p>
+      </div>
+      <div class="module-card">
+        <div class="module-icon">📦</div>
+        <h3>Gestión de Pedidos</h3>
+        <p>Próximamente disponible</p>
+      </div>
+      <div class="module-card">
+        <div class="module-icon">📊</div>
+        <h3>Estadísticas</h3>
+        <p>Próximamente disponible</p>
+      </div>
+    </div>
+  </div>
+</div>

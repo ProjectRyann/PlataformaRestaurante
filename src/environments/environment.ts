@@ -11,5 +11,5 @@ export const environment = {
     }
     ,
     // Lista de correos permitidos como administradores 
-    adminEmails: ['ortizgonzalesbryanalexander1@gmail.com']
+    adminEmails: ['ortizgonzalesbryanalexander1@gmail.com', ]
 };
