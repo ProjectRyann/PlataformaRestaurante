@@ -28,6 +28,29 @@ export class AuthService {
   }
 
   /**
+   * Asigna el rol de admin a un usuario (actualiza Firestore y el sujeto local)
+   */
+  async asignarRolAdmin(uid: string): Promise<Usuario | null> {
+    try {
+      const docRef = doc(this.firestore, 'usuarios', uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const datos = docSnap.data() as Usuario;
+        const actualizado: Usuario = { ...datos, rol: 'admin' };
+        await setDoc(docRef, actualizado, { merge: true });
+        this.usuarioSubject.next(actualizado);
+        return actualizado;
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Error asignando rol admin:', error);
+      return null;
+    }
+  }
+
+  /**
    * Inicializa la persistencia local para mantener la sesión
    */
   private inicializarPersistencia(): void {
@@ -109,15 +132,16 @@ export class AuthService {
 
   /**
    * Inicia sesión con Google
+   * Retorna el Usuario (creado o existente) para que el llamador pueda verificar el rol / email
    */
-  async iniciarSesionConGoogle(): Promise<void> {
+  async iniciarSesionConGoogle(): Promise<Usuario> {
     try {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(this.auth, provider);
-      
+
       // Verificar si el usuario ya existe en Firestore
       const usuarioDatos = await this.obtenerDatosUsuario(result.user.uid);
-      
+
       if (!usuarioDatos) {
         // Si no existe, crear nuevo documento de usuario como cliente
         const nuevoUsuario: Usuario = {
@@ -127,14 +151,16 @@ export class AuthService {
           apellido: result.user.displayName?.split(' ').slice(1).join(' ') || '',
           rol: 'cliente'
         };
-        
+
         await setDoc(doc(this.firestore, 'usuarios', result.user.uid), nuevoUsuario);
         this.usuarioSubject.next(nuevoUsuario);
+        return nuevoUsuario;
       } else {
         this.usuarioSubject.next(usuarioDatos);
+        return usuarioDatos;
       }
     } catch (error: any) {
-      throw new Error('Error al iniciar sesión con Google: ' + error.message);
+      throw new Error('Error al iniciar sesión con Google: ' + (error?.message || error));
     }
   }
 
