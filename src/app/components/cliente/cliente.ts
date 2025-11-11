@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgIf, NgForOf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { AuthService, Usuario } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -27,7 +27,7 @@ interface Pedido {
 @Component({
   selector: 'app-cliente',
   standalone: true,
-  imports: [CommonModule, NgIf, NgForOf],
+  imports: [CommonModule],
   templateUrl: './cliente.html',
   styleUrl: './cliente.css'
 })

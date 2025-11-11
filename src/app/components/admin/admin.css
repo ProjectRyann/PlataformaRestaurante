@@ -1,10 +1,10 @@
 .admin-container {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: #3a0303f7;
 }
 
 .navbar {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  background: linear-gradient(135deg, #e15d29 0%, #9f162a 100%);
   color: white;
   padding: 15px 30px;
   display: flex;
@@ -55,7 +55,7 @@
 }
 
 .welcome-card {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  background: linear-gradient(135deg, #a82409 0%, #cfa9af 100%);
   color: white;
   padding: 40px;
   border-radius: 12px;

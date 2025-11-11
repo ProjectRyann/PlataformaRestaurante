@@ -2,16 +2,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #a22916 0%, #b88b2c 50%);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;
 }
 
 .login-box {
   background: white;
   border-radius: 12px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);   
+  width: 100%;  
   max-width: 420px;
   padding: 40px;
   animation: slideIn 0.4s ease-out;
