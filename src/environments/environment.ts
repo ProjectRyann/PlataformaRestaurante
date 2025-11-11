@@ -9,4 +9,7 @@ export const environment = {
     appId: "1:388586203703:web:401bfc4948bd3a9657edb2",
     measurementId: "G-H28TMJBPE1"
     }
+    ,
+    // Lista de correos permitidos como administradores 
+    adminEmails: ['ortizgonzalesbryanalexander1@gmail.com']
 };
