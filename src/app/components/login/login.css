@@ -216,6 +216,13 @@
   font-size: 1.3em;
 }
 
+.icon-google {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 4px;
+}
+
 .divider {
   text-align: center;
   color: #ccc;

@@ -22,8 +22,14 @@
     <!-- login para el cliente -->
     <div class="tab-content" *ngIf="vistaActual === 'login-cliente'">
       <div class="auth-buttons">
-        <button class="btn-google" (click)="iniciarSesionGoogle()" [disabled]="cargando">
-          <span>🔐</span> Iniciar sesión con Google
+        <button class="btn-google" (click)="iniciarSesionGoogle()" [disabled]="cargando" aria-label="Iniciar sesión con Google">
+          <svg class="icon-google" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 533.5 544.3" aria-hidden="true">
+            <path fill="#4285F4" d="M533.5 278.4c0-18.5-1.5-36.2-4.3-53.4H272v101h146.9c-6.3 34.1-25.1 62.9-53.6 82.3v68.3h86.6c50.7-46.7 81.6-115.6 81.6-198.2z"/>
+            <path fill="#34A853" d="M272 544.3c72.6 0 133.6-23.9 178.1-64.9l-86.6-68.3c-24.1 16.2-55.1 25.8-91.5 25.8-70 0-129.4-47.3-150.6-111.1H32.1v69.9C75.2 481.9 167.4 544.3 272 544.3z"/>
+            <path fill="#FBBC05" d="M121.4 324.8c-10.6-31.9-10.6-66.2 0-98.1V156.8H32.1c-44.6 89.3-44.6 194.8 0 284.1l89.3-69.9z"/>
+            <path fill="#EA4335" d="M272 108.1c39.6-.6 77.6 14.5 106.6 41.9l80-80C405.4 19.1 341.2-1.9 272 0 167.4 0 75.2 62.4 32.1 156.8l89.3 69.9C142.6 155.4 202 108.1 272 108.1z"/>
+          </svg>
+          <span>Iniciar sesión con Google</span>
         </button>
       </div>
 
