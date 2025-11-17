@@ -5,7 +5,7 @@ import { AdminComponent } from './components/admin/admin';
 import { authGuard, noAuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-	{ path: '', redirectTo: '/cliente', pathMatch: 'full' },
+	{ path: '', redirectTo: '/login', pathMatch: 'full' },
 	{ path: 'login', component: LoginComponent, canActivate: [noAuthGuard] },
 	{ path: 'cliente', component: ClienteComponent, canActivate: [authGuard], data: { roles: ['cliente'] } },
 	{ path: 'admin', component: AdminComponent, canActivate: [authGuard], data: { roles: ['admin'] } },
