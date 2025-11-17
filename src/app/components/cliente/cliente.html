@@ -33,14 +33,48 @@
           <div class="item-info">
             <h3>{{ producto.nombre }}</h3>
             <p class="categoria">{{ producto.categoria }}</p>
-            <p class="descripcion">{{ producto.descripcion }}</p>
+            <p class="precio">${{ producto.precio }}</p>
             <div class="item-footer">
-              <span class="precio">${{ producto.precio }}</span>
+              <button (click)="abrirDetalles(producto)" class="btn-detalles">
+                ℹ️ Detalles
+              </button>
               <button (click)="agregarAlCarrito(producto)" class="btn-agregar">
                 🛒 Agregar
               </button>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL DE DETALLES -->
+    <div class="modal-overlay" *ngIf="mostrarModalDetalles" (click)="cerrarDetalles()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>{{ productoSeleccionado?.nombre }}</h2>
+          <button class="btn-cerrar" (click)="cerrarDetalles()">✕</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-imagen">
+            <img *ngIf="productoSeleccionado?.imagenUrl; else emojiModal" [src]="productoSeleccionado?.imagenUrl" [alt]="productoSeleccionado?.nombre" />
+            <ng-template #emojiModal>
+              <span class="emoji-grande">{{ productoSeleccionado?.imagen }}</span>
+            </ng-template>
+          </div>
+          <div class="modal-info">
+            <p class="categoria">{{ productoSeleccionado?.categoria }}</p>
+            <p class="precio-grande">${{ productoSeleccionado?.precio }}</p>
+            <h4>Descripción</h4>
+            <p class="descripcion-completa">{{ productoSeleccionado?.descripcion }}</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="agregarAlCarrito(productoSeleccionado!)" class="btn-agregar-modal">
+            🛒 Agregar al Carrito
+          </button>
+          <button (click)="cerrarDetalles()" class="btn-cerrar-modal">
+            Cerrar
+          </button>
         </div>
       </div>
     </div>

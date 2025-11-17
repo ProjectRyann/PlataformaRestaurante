@@ -27,8 +27,11 @@ export class ClienteComponent implements OnInit {
   pedidos: Pedido[] = [];
   cargando = false;
 
-  categorias: string[] = ['Bebidas', 'Platos fuertes', 'Postres'];
+  categorias: string[] = ['Bebidas', 'Platos fuertes', 'Postres', 'Entradas', 'Ensaladas'];
   categoriaSeleccionada: string = 'todas';
+
+  productoSeleccionado: Producto | null = null;
+  mostrarModalDetalles = false;
 
   constructor(
     private authService: AuthService,
@@ -158,5 +161,15 @@ export class ClienteComponent implements OnInit {
     if (carritoElement) {
       carritoElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  }
+
+  abrirDetalles(producto: Producto): void {
+    this.productoSeleccionado = producto;
+    this.mostrarModalDetalles = true;
+  }
+
+  cerrarDetalles(): void {
+    this.mostrarModalDetalles = false;
+    this.productoSeleccionado = null;
   }
 }
