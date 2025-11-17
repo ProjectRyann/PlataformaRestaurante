@@ -146,6 +146,15 @@
                 class="form-control"
                 maxlength="2">
             </div>
+
+            <div class="form-group">
+              <label>Imagen (opcional)</label>
+              <input type="file" (change)="onFileSelected($event)" accept="image/*" class="form-control" />
+              <div *ngIf="selectedPreviewUrl || formularioProducto.imagenUrl" class="image-preview" style="margin-top:8px; display:flex; align-items:center; gap:8px;">
+                <img [src]="selectedPreviewUrl ? selectedPreviewUrl : formularioProducto.imagenUrl" alt="Preview" style="width:64px; height:64px; object-fit:cover; border-radius:8px;" />
+                <button type="button" (click)="clearSelectedImage()" class="btn-sm btn-cancel">Borrar</button>
+              </div>
+            </div>
           </div>
 
           <div class="form-actions">
@@ -180,7 +189,10 @@
           </thead>
           <tbody>
             <tr *ngFor="let producto of productos">
-              <td class="emoji-cell">{{ producto.imagen }}</td>
+              <td class="emoji-cell">
+                <img *ngIf="producto.imagenUrl" [src]="producto.imagenUrl" alt="{{producto.nombre}}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;" />
+                <span *ngIf="!producto.imagenUrl">{{ producto.imagen }}</span>
+              </td>
               <td>{{ producto.nombre }}</td>
               <td>{{ producto.categoria }}</td>
               <td>${{ producto.precio }}</td>

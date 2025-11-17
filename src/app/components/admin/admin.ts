@@ -29,10 +29,15 @@ export class AdminComponent implements OnInit {
     descripcion: '',
     precio: 0,
     categoria: 'Bebidas',
-    imagen: '🍽️'
+    imagen: '🍽️',
+    imagenUrl: undefined as string | undefined
   };
 
   categorias = ['Bebidas', 'Platos fuertes', 'Postres'];
+
+  // File upload state
+  selectedFile: File | null = null;
+  selectedPreviewUrl?: string;
 
   constructor(
     private authService: AuthService,
@@ -94,8 +99,11 @@ export class AdminComponent implements OnInit {
       descripcion: '',
       precio: 0,
       categoria: 'Bebidas',
-      imagen: '🍽️'
+      imagen: '🍽️',
+      imagenUrl: undefined
     };
+    this.selectedFile = null;
+    this.selectedPreviewUrl = undefined;
   }
 
   editarProducto(producto: Producto): void {
@@ -106,8 +114,11 @@ export class AdminComponent implements OnInit {
       descripcion: producto.descripcion,
       precio: producto.precio,
       categoria: producto.categoria,
-      imagen: producto.imagen
+      imagen: producto.imagen,
+      imagenUrl: (producto as any).imagenUrl // may be undefined
     };
+    this.selectedFile = null;
+    this.selectedPreviewUrl = this.formularioProducto.imagenUrl;
   }
 
   async guardarProducto(): Promise<void> {
@@ -118,16 +129,37 @@ export class AdminComponent implements OnInit {
 
     try {
       this.cargando = true;
+      // Si hay un archivo seleccionado, subirlo y obtener URL
+      let imagenUrlToSave: string | undefined = this.formularioProducto.imagenUrl as string | undefined;
+      if (this.selectedFile) {
+        try {
+          imagenUrlToSave = await this.productoService.subirImagen(this.selectedFile);
+        } catch (err) {
+          console.error('Error subiendo imagen:', err);
+          alert('Error al subir la imagen');
+          return;
+        }
+      }
+
+      const datos: any = {
+        nombre: this.formularioProducto.nombre,
+        descripcion: this.formularioProducto.descripcion,
+        precio: this.formularioProducto.precio,
+        categoria: this.formularioProducto.categoria,
+        imagen: this.formularioProducto.imagen
+      };
+      if (imagenUrlToSave) datos.imagenUrl = imagenUrlToSave;
+
       if (this.productoEnEdicion) {
         // Actualizar
         await this.productoService.actualizarProducto(
           this.productoEnEdicion.id,
-          this.formularioProducto
+          datos
         );
         alert('✓ Producto actualizado correctamente');
       } else {
         // Crear
-        await this.productoService.crearProducto(this.formularioProducto);
+        await this.productoService.crearProducto(datos);
         alert('✓ Producto creado correctamente');
       }
       this.mostrarFormularioProducto = false;
@@ -137,6 +169,38 @@ export class AdminComponent implements OnInit {
       alert('Error al guardar el producto');
     } finally {
       this.cargando = false;
+      this.selectedFile = null;
+      this.selectedPreviewUrl = undefined;
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      // crear preview local
+      try {
+        // revoke previous preview if any
+        if (this.selectedPreviewUrl) {
+          try { URL.revokeObjectURL(this.selectedPreviewUrl); } catch (e) {}
+        }
+        this.selectedPreviewUrl = URL.createObjectURL(this.selectedFile);
+      } catch (e) {
+        this.selectedPreviewUrl = undefined;
+      }
+    }
+  }
+
+  clearSelectedImage(): void {
+    this.selectedFile = null;
+    if (this.selectedPreviewUrl) {
+      try { URL.revokeObjectURL(this.selectedPreviewUrl); } catch (e) {}
+    }
+    this.selectedPreviewUrl = undefined;
+    if (this.productoEnEdicion) {
+      // mantener imagenUrl existente en formularioProducto si hay una
+    } else {
+      this.formularioProducto.imagenUrl = undefined;
     }
   }
 
@@ -164,7 +228,8 @@ export class AdminComponent implements OnInit {
       descripcion: '',
       precio: 0,
       categoria: 'Bebidas',
-      imagen: '🍽️'
+      imagen: '🍽️',
+      imagenUrl: undefined
     };
   }
 
