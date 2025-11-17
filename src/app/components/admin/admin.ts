@@ -136,7 +136,8 @@ export class AdminComponent implements OnInit {
           imagenUrlToSave = await this.productoService.subirImagen(this.selectedFile);
         } catch (err) {
           console.error('Error subiendo imagen:', err);
-          alert('Error al subir la imagen');
+          const msg = (err as any)?.message || 'Error al subir la imagen';
+          alert(`Error al subir la imagen: ${msg}`);
           return;
         }
       }
