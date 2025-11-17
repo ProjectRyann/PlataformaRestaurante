@@ -121,6 +121,20 @@
   font-size: 1.1em;
 }
 
+.item-image img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.item-image .emoji {
+  font-size: 2.2rem;
+  display: inline-block;
+  line-height: 1;
+}
+
 .categoria {
   margin: 0 0 8px 0;
   color: #999;

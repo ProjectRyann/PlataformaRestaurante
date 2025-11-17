@@ -19,7 +19,12 @@
       <h2>📋 Menú del Día</h2>
       <div class="menu-grid">
         <div class="menu-item" *ngFor="let producto of productos">
-          <div class="item-image">{{ producto.imagen }}</div>
+          <div class="item-image">
+            <img *ngIf="producto.imagenUrl; else emojiTpl" [src]="producto.imagenUrl" [alt]="producto.nombre" />
+            <ng-template #emojiTpl>
+              <span class="emoji">{{ producto.imagen }}</span>
+            </ng-template>
+          </div>
           <div class="item-info">
             <h3>{{ producto.nombre }}</h3>
             <p class="categoria">{{ producto.categoria }}</p>
