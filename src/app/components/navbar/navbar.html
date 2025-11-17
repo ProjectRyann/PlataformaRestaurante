@@ -1,0 +1,50 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <!-- Logo / Brand -->
+    <div class="navbar-brand">
+      <h2>🍽️ Sabor Criollo</h2>
+    </div>
+
+    <!-- Menu Hamburguesa (Mobile) -->
+    <button class="menu-toggle" (click)="toggleMenu()" [class.active]="mostrarMenu" aria-label="Menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Menú Principal -->
+    <div class="navbar-menu" [class.active]="mostrarMenu">
+      <!-- Categorías -->
+      <div class="categorias-menu">
+        <button 
+          class="categoria-btn"
+          [class.active]="categoriaSeleccionada === 'todas'"
+          (click)="seleccionarCategoria('todas')">
+          📋 Todos
+        </button>
+        <button 
+          *ngFor="let cat of categorias"
+          class="categoria-btn"
+          [class.active]="categoriaSeleccionada === cat"
+          (click)="seleccionarCategoria(cat)">
+          {{ cat }}
+        </button>
+      </div>
+
+      <!-- Acciones Derecha -->
+      <div class="navbar-actions">
+        <!-- Carrito -->
+        <button class="cart-btn" (click)="clicCarrito()" [class.has-items]="cartCount > 0">
+          🛒 Carrito
+          <span *ngIf="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
+        </button>
+
+        <!-- Usuario & Logout -->
+        <div class="user-section">
+          <span class="usuario-nombre" *ngIf="usuario">{{ usuario.nombre || usuario.email }}</span>
+          <button (click)="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
