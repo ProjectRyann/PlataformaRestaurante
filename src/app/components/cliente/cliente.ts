@@ -2,27 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService, Usuario } from '../../services/auth.service';
+import { ProductoService, Producto } from '../../services/producto.service';
+import { PedidoService, Pedido } from '../../services/pedido.service';
 import { Router } from '@angular/router';
-
-interface Producto {
-  id: string;
-  nombre: string;
-  descripcion: string;
-  precio: number;
-  categoria: string;
-  imagen: string;
-}
 
 interface CarritoItem extends Producto {
   cantidad: number;
-}
-
-interface Pedido {
-  id: string;
-  estado: 'pendiente' | 'en-preparacion' | 'listo' | 'entregado';
-  total: number;
-  fecha: Date;
-  items: CarritoItem[];
 }
 
 @Component({
@@ -38,9 +23,12 @@ export class ClienteComponent implements OnInit {
   productos: Producto[] = [];
   carrito: CarritoItem[] = [];
   pedidos: Pedido[] = [];
+  cargando = false;
 
   constructor(
     private authService: AuthService,
+    private productoService: ProductoService,
+    private pedidoService: PedidoService,
     private router: Router
   ) {}
 
@@ -56,78 +44,26 @@ export class ClienteComponent implements OnInit {
     this.cargarPedidos();
   }
 
-  private cargarProductos(): void {
-    // Datos de ejemplo - En producción, estos vendrían de Firebase
-    this.productos = [
-      {
-        id: '1',
-        nombre: 'Bandeja Paisa',
-        descripcion: 'Plato típico colombiano con carne, chicharrón y más',
-        precio: 25000,
-        categoria: 'Platos Principales',
-        imagen: '🍖'
-      },
-      {
-        id: '2',
-        nombre: 'Ajiaco Santandereano',
-        descripcion: 'Sopa tradicional con pollo, papa y verduras',
-        precio: 18000,
-        categoria: 'Sopas',
-        imagen: '🍲'
-      },
-      {
-        id: '3',
-        nombre: 'Tamales',
-        descripcion: 'Tamales caseros envueltos en hoja de plátano',
-        precio: 8000,
-        categoria: 'Entrada',
-        imagen: '🌮'
-      },
-      {
-        id: '4',
-        nombre: 'Sancocho de Costilla',
-        descripcion: 'Sancocho con costilla y verduras frescas',
-        precio: 20000,
-        categoria: 'Platos Principales',
-        imagen: '🍲'
-      },
-      {
-        id: '5',
-        nombre: 'Empanadas',
-        descripcion: 'Empanadas rellenas de carne o queso',
-        precio: 5000,
-        categoria: 'Entrada',
-        imagen: '🥟'
-      },
-      {
-        id: '6',
-        nombre: 'Arepa con Queso',
-        descripcion: 'Arepa tradicional rellena de queso derretido',
-        precio: 4000,
-        categoria: 'Entrada',
-        imagen: '🥯'
-      }
-    ];
+  private async cargarProductos(): Promise<void> {
+    try {
+      this.cargando = true;
+      this.productos = await this.productoService.obtenerProductos();
+    } catch (error) {
+      console.error('Error al cargar productos:', error);
+      alert('Error al cargar productos');
+    } finally {
+      this.cargando = false;
+    }
   }
 
-  private cargarPedidos(): void {
-    // Datos de ejemplo 
-    this.pedidos = [
-      {
-        id: 'PED001',
-        estado: 'entregado',
-        total: 45000,
-        fecha: new Date('2025-11-08'),
-        items: []
-      },
-      {
-        id: 'PED002',
-        estado: 'en-preparacion',
-        total: 25000,
-        fecha: new Date('2025-11-09'),
-        items: []
+  private async cargarPedidos(): Promise<void> {
+    try {
+      if (this.usuario) {
+        this.pedidos = await this.pedidoService.obtenerPedidosPorUsuario(this.usuario.uid);
       }
-    ];
+    } catch (error) {
+      console.error('Error al cargar pedidos:', error);
+    }
   }
 
   agregarAlCarrito(producto: Producto): void {
@@ -148,33 +84,46 @@ export class ClienteComponent implements OnInit {
     return this.carrito.reduce((total, item) => total + (item.precio * item.cantidad), 0);
   }
 
-  confirmarPedido(): void {
+  async confirmarPedido(): Promise<void> {
     if (this.carrito.length === 0) {
       alert('El carrito está vacío');
       return;
     }
 
-    const total = this.calcularTotal();
-    alert(`✓ Pedido confirmado!\nTotal: $${total}\nEstado: Pendiente de preparación`);
+    if (!this.usuario) {
+      alert('Error: usuario no identificado');
+      return;
+    }
 
-    // Aquí se enviaría a Firebase
-    const nuevoPedido: Pedido = {
-      id: 'PED' + Date.now(),
-      estado: 'pendiente',
-      total: total,
-      fecha: new Date(),
-      items: [...this.carrito]
-    };
+    try {
+      this.cargando = true;
+      const total = this.calcularTotal();
+      
+      const nuevoPedido: Omit<Pedido, 'id'> = {
+        uid: this.usuario.uid,
+        estado: 'pendiente',
+        total: total,
+        fecha: new Date(),
+        items: [...this.carrito]
+      };
 
-    this.pedidos.unshift(nuevoPedido);
-    this.carrito = [];
+      const pedidoId = await this.pedidoService.crearPedido(nuevoPedido);
+      alert(`✓ Pedido confirmado!\nID: ${pedidoId}\nTotal: $${total}\nEstado: Pendiente de preparación`);
+      
+      this.carrito = [];
+      await this.cargarPedidos();
+    } catch (error) {
+      console.error('Error al confirmar pedido:', error);
+      alert('Error al confirmar el pedido');
+    } finally {
+      this.cargando = false;
+    }
   }
 
   agregarComentario(pedidoId: string): void {
     const comentario = prompt('Escribe tu comentario:');
     if (comentario) {
       alert(`✓ Comentario agregado: "${comentario}"`);
-      // Aquí se enviaría a Firebase
     }
   }
 
