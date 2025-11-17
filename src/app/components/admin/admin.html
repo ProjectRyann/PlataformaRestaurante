@@ -10,40 +10,251 @@
   </nav>
 
   <div class="content">
-    <div class="welcome-section">
-      <div class="welcome-card">
-        <h1>Bienvenido, {{ usuario?.nombre }}! 👋</h1>
-        <p>Sistema de Administración - Sabor Criollo S.A.S</p>
+    <!-- Barra de navegación de vistas -->
+    <div class="nav-vistas">
+      <button 
+        (click)="cambiarVista('dashboard')"
+        [class.active]="vistaActual === 'dashboard'"
+        class="nav-btn">
+        📊 Dashboard
+      </button>
+      <button 
+        (click)="cambiarVista('productos')"
+        [class.active]="vistaActual === 'productos'"
+        class="nav-btn">
+        🍽️ Productos
+      </button>
+      <button 
+        (click)="cambiarVista('pedidos')"
+        [class.active]="vistaActual === 'pedidos'"
+        class="nav-btn">
+        📦 Pedidos
+      </button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div *ngIf="vistaActual === 'dashboard'" class="vista-section">
+      <div class="welcome-section">
+        <div class="welcome-card">
+          <h1>Bienvenido, {{ usuario?.nombre }}! 👋</h1>
+          <p>Sistema de Administración - Sabor Criollo S.A.S</p>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🍽️</div>
+          <div class="stat-content">
+            <h3>Total Productos</h3>
+            <p class="stat-value">{{ obtenerTotalProductos() }}</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">📦</div>
+          <div class="stat-content">
+            <h3>Pedidos Hoy</h3>
+            <p class="stat-value">{{ obtenerTotalPedidosHoy() }}</p>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-content">
+            <h3>Total Ventas</h3>
+            <p class="stat-value">${{ obtenerTotalVentas() }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="charts-section">
+        <div class="chart-card">
+          <h3>🏆 Productos Más Vendidos</h3>
+          <div class="chart-content">
+            <div *ngIf="obtenerProductosMasVendidos().length > 0">
+              <div *ngFor="let item of obtenerProductosMasVendidos()" class="chart-item">
+                <span>{{ item.nombre }}</span>
+                <div class="bar">
+                  <div class="bar-fill" [style.width.%]="(item.cantidad / 10) * 100"></div>
+                </div>
+                <span>{{ item.cantidad }}</span>
+              </div>
+            </div>
+            <p *ngIf="obtenerProductosMasVendidos().length === 0" class="no-data">Sin datos disponibles</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="dashboard-info">
-      <p class="info-text">
-        ✓ Has iniciado sesión correctamente como administrador.
-      </p>
-      <p class="info-text">
-        El módulo de administración está en desarrollo.
-      </p>
-      <p class="construction-message">
-        🚧 Próximamente: Gestión de menú, pedidos, estadísticas y más.
-      </p>
+    <!-- PRODUCTOS -->
+    <div *ngIf="vistaActual === 'productos'" class="vista-section">
+      <div class="section-header">
+        <h2>🍽️ Gestión de Productos</h2>
+        <button 
+          (click)="abrirFormularioProducto()"
+          [disabled]="cargando"
+          class="btn-primary">
+          ➕ Nuevo Producto
+        </button>
+      </div>
+
+      <!-- Formulario de Producto -->
+      <div *ngIf="mostrarFormularioProducto" class="formulario-container">
+        <div class="formulario-box">
+          <h3>{{ productoEnEdicion ? 'Editar' : 'Nuevo' }} Producto</h3>
+          
+          <div class="form-group">
+            <label>Nombre del Producto</label>
+            <input 
+              type="text" 
+              [(ngModel)]="formularioProducto.nombre"
+              placeholder="Ej: Bandeja Paisa"
+              class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label>Descripción</label>
+            <textarea 
+              [(ngModel)]="formularioProducto.descripcion"
+              placeholder="Descripción del producto"
+              class="form-control"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Precio ($)</label>
+              <input 
+                type="number" 
+                [(ngModel)]="formularioProducto.precio"
+                placeholder="0"
+                class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label>Categoría</label>
+              <select [(ngModel)]="formularioProducto.categoria" class="form-control">
+                <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Emoji</label>
+              <input 
+                type="text" 
+                [(ngModel)]="formularioProducto.imagen"
+                placeholder="🍖"
+                class="form-control"
+                maxlength="2">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button 
+              (click)="guardarProducto()"
+              [disabled]="cargando"
+              class="btn-save">
+              {{ cargando ? '⏳ Guardando...' : '✓ Guardar' }}
+            </button>
+            <button 
+              (click)="cancelarFormulario()"
+              [disabled]="cargando"
+              class="btn-cancel">
+              ✕ Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de Productos -->
+      <div class="productos-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Emoji</th>
+              <th>Nombre</th>
+              <th>Categoría</th>
+              <th>Precio</th>
+              <th>Descripción</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let producto of productos">
+              <td class="emoji-cell">{{ producto.imagen }}</td>
+              <td>{{ producto.nombre }}</td>
+              <td>{{ producto.categoria }}</td>
+              <td>${{ producto.precio }}</td>
+              <td>{{ producto.descripcion }}</td>
+              <td class="acciones">
+                <button 
+                  (click)="editarProducto(producto)"
+                  class="btn-sm btn-edit">
+                  ✏️ Editar
+                </button>
+                <button 
+                  (click)="eliminarProducto(producto.id)"
+                  [disabled]="cargando"
+                  class="btn-sm btn-delete">
+                  🗑️ Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p *ngIf="productos.length === 0" class="no-data">No hay productos registrados</p>
+      </div>
     </div>
 
-    <div class="placeholder-modules">
-      <div class="module-card">
-        <div class="module-icon">📋</div>
-        <h3>Gestión de Menú</h3>
-        <p>Próximamente disponible</p>
+    <!-- PEDIDOS -->
+    <div *ngIf="vistaActual === 'pedidos'" class="vista-section">
+      <div class="section-header">
+        <h2>📦 Gestión de Pedidos</h2>
+        <span class="badge">{{ pedidos.length }} Pedidos</span>
       </div>
-      <div class="module-card">
-        <div class="module-icon">📦</div>
-        <h3>Gestión de Pedidos</h3>
-        <p>Próximamente disponible</p>
-      </div>
-      <div class="module-card">
-        <div class="module-icon">📊</div>
-        <h3>Estadísticas</h3>
-        <p>Próximamente disponible</p>
+
+      <div class="pedidos-container">
+        <div *ngFor="let pedido of pedidos" class="pedido-card">
+          <div class="pedido-header">
+            <div class="pedido-info">
+              <h4>#{{ pedido.id }}</h4>
+              <p>Cliente: {{ pedido.uid }}</p>
+              <p>Fecha: {{ pedido.fecha | date: 'short' }}</p>
+            </div>
+            <div class="pedido-estado">
+              <span 
+                class="estado-badge"
+                [style.background-color]="obtenerColorEstado(pedido.estado)">
+                {{ obtenerEtiquetaEstado(pedido.estado) }}
+              </span>
+            </div>
+          </div>
+
+          <div class="pedido-items">
+            <h5>Items:</h5>
+            <ul>
+              <li *ngFor="let item of pedido.items">
+                {{ item.imagen }} {{ item.nombre }} x{{ item.cantidad }} = ${{ item.precio * item.cantidad }}
+              </li>
+            </ul>
+          </div>
+
+          <div class="pedido-footer">
+            <div>
+              <strong>Total: ${{ pedido.total }}</strong>
+            </div>
+            <button 
+              *ngIf="pedido.estado !== 'entregado'"
+              (click)="cambiarEstadoPedido(pedido, obtenerProximoEstado(pedido.estado))"
+              class="btn-primary">
+              ➜ {{ obtenerEtiquetaEstado(obtenerProximoEstado(pedido.estado)) }}
+            </button>
+            <span *ngIf="pedido.estado === 'entregado'" class="badge-success">✓ Completado</span>
+          </div>
+        </div>
+
+        <div *ngIf="pedidos.length === 0" class="no-data">
+          No hay pedidos registrados
+        </div>
       </div>
     </div>
   </div>
