@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where, collectionSnapshots } from '@angular/fire/firestore';
+import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -10,6 +11,8 @@ export interface Producto {
   precio: number;
   categoria: string;
   imagen: string;
+  // URL de la imagen subida a Firebase Storage (opcional)
+  imagenUrl?: string;
 }
 
 @Injectable({
@@ -19,7 +22,25 @@ export class ProductoService {
 
   private productoCollection = 'productos';
 
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore, private storage: Storage) {}
+
+  /**
+   * Sube una imagen a Firebase Storage y devuelve su URL pública
+   */
+  async subirImagen(file: File): Promise<string> {
+    try {
+      const storageRef = ref(this.storage, `productos/${Date.now()}_${file.name}`);
+      // Subir el File (Blob) directamente
+      const snapshot = await uploadBytes(storageRef, file);
+      // Obtener URL pública
+      const url = await getDownloadURL(snapshot.ref ?? storageRef);
+      return url;
+    } catch (error) {
+      console.error('Error al subir imagen (producto.service):', error);
+      // Re-lanzar con mensaje más claro para la UI
+      throw new Error((error as any)?.message || 'Error desconocido al subir imagen');
+    }
+  }
 
   /**
    * Obtiene todos los productos
