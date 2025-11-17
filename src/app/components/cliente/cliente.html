@@ -1,13 +1,14 @@
 <div class="cliente-container">
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <h2>🍽️ Sabor Criollo - Cliente</h2>
-    </div>
-    <div class="user-info">
-      <span class="usuario-nombre">{{ usuario?.nombre || usuario?.email }}</span>
-      <button (click)="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
-    </div>
-  </nav>
+  <!-- NavBar con categorías y carrito -->
+  <app-navbar
+    [usuario]="usuario"
+    [cartCount]="carrito.length"
+    [categorias]="categorias"
+    [categoriaSeleccionada]="categoriaSeleccionada"
+    (categoriaChange)="cambiarCategoria($event)"
+    (cartClick)="irAlCarrito()"
+    (logout)="cerrarSesion()">
+  </app-navbar>
 
   <div class="content">
     <div class="welcome-section">
@@ -16,11 +17,15 @@
     </div>
 
     <div class="menu-section">
-      <h2>📋 Menú del Día</h2>
+      <h2>📋 Menú
+        <span class="menu-filter-label" *ngIf="categoriaSeleccionada !== 'todas'">
+          - {{ categoriaSeleccionada }}
+        </span>
+      </h2>
       <div class="menu-grid">
-        <div class="menu-item" *ngFor="let producto of productos">
+        <div class="menu-item" *ngFor="let producto of productosFiltered">
           <div class="item-image">
-            <img *ngIf="producto.imagenUrl; else emojiTpl" [src]="producto.imagenUrl" [alt]="producto.nombre" />
+            <img *ngIf="producto.imagenUrl; else emojiTpl" [src]="producto.imagenUrl" [alt]="producto.nombre" loading="lazy" />
             <ng-template #emojiTpl>
               <span class="emoji">{{ producto.imagen }}</span>
             </ng-template>
@@ -40,7 +45,7 @@
       </div>
     </div>
 
-    <div class="cart-section" *ngIf="carrito.length > 0">
+    <div class="cart-section" *ngIf="carrito.length > 0" id="cart-section">
       <h2>🛒 Mi Carrito</h2>
       <div class="cart-items">
         <div class="cart-item" *ngFor="let item of carrito; let i = index">

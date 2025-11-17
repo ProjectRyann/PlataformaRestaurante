@@ -456,6 +456,28 @@ textarea.form-control {
   text-align: center;
 }
 
+.emoji-cell img {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.image-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.image-preview img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
 .acciones {
   display: flex;
   gap: 8px;

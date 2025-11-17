@@ -28,9 +28,14 @@ export class NavbarComponent {
     private router: Router
   ) {}
 
-  seleccionarCategoria(categoria: string): void {
-    this.categoriaSeleccionada = categoria;
-    this.categoriaChange.emit(categoria);
+  seleccionarCategoria(categoria: string | Event): void {
+    let cat = categoria;
+    if (categoria instanceof Event) {
+      const target = categoria.target as HTMLSelectElement;
+      cat = target.value;
+    }
+    this.categoriaSeleccionada = cat as string;
+    this.categoriaChange.emit(cat as string);
     this.mostrarMenu = false;
   }
 

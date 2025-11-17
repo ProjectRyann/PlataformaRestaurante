@@ -30,7 +30,7 @@ export class ProductoService {
   async subirImagen(file: File): Promise<string> {
     try {
       const storageRef = ref(this.storage, `productos/${Date.now()}_${file.name}`);
-      // Subir el File (Blob) directamente
+      // Subir el File directamente
       const snapshot = await uploadBytes(storageRef, file);
       // Obtener URL pública
       const url = await getDownloadURL(snapshot.ref ?? storageRef);

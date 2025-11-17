@@ -5,6 +5,7 @@ import { AuthService, Usuario } from '../../services/auth.service';
 import { ProductoService, Producto } from '../../services/producto.service';
 import { PedidoService, Pedido } from '../../services/pedido.service';
 import { Router } from '@angular/router';
+import { NavbarComponent } from '../navbar/navbar';
 
 interface CarritoItem extends Producto {
   cantidad: number;
@@ -13,7 +14,7 @@ interface CarritoItem extends Producto {
 @Component({
   selector: 'app-cliente',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './cliente.html',
   styleUrl: './cliente.css'
 })
@@ -21,9 +22,13 @@ export class ClienteComponent implements OnInit {
 
   usuario: Usuario | null = null;
   productos: Producto[] = [];
+  productosFiltered: Producto[] = [];
   carrito: CarritoItem[] = [];
   pedidos: Pedido[] = [];
   cargando = false;
+
+  categorias: string[] = ['Bebidas', 'Platos fuertes', 'Postres'];
+  categoriaSeleccionada: string = 'todas';
 
   constructor(
     private authService: AuthService,
@@ -48,11 +53,27 @@ export class ClienteComponent implements OnInit {
     try {
       this.cargando = true;
       this.productos = await this.productoService.obtenerProductos();
+      this.aplicarFiltro();
     } catch (error) {
       console.error('Error al cargar productos:', error);
       alert('Error al cargar productos');
     } finally {
       this.cargando = false;
+    }
+  }
+
+  cambiarCategoria(categoria: string): void {
+    this.categoriaSeleccionada = categoria;
+    this.aplicarFiltro();
+  }
+
+  private aplicarFiltro(): void {
+    if (this.categoriaSeleccionada === 'todas') {
+      this.productosFiltered = [...this.productos];
+    } else {
+      this.productosFiltered = this.productos.filter(
+        p => p.categoria === this.categoriaSeleccionada
+      );
     }
   }
 
@@ -130,5 +151,12 @@ export class ClienteComponent implements OnInit {
   async cerrarSesion(): Promise<void> {
     await this.authService.cerrarSesion();
     this.router.navigate(['/login']);
+  }
+
+  irAlCarrito(): void {
+    const carritoElement = document.getElementById('cart-section');
+    if (carritoElement) {
+      carritoElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }

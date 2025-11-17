@@ -14,21 +14,17 @@
 
     <!-- Menú Principal -->
     <div class="navbar-menu" [class.active]="mostrarMenu">
-      <!-- Categorías -->
+      <!-- Categorías Select -->
       <div class="categorias-menu">
-        <button 
-          class="categoria-btn"
-          [class.active]="categoriaSeleccionada === 'todas'"
-          (click)="seleccionarCategoria('todas')">
-          📋 Todos
-        </button>
-        <button 
-          *ngFor="let cat of categorias"
-          class="categoria-btn"
-          [class.active]="categoriaSeleccionada === cat"
-          (click)="seleccionarCategoria(cat)">
-          {{ cat }}
-        </button>
+        <label for="categoria-select" class="categoria-label">Categoría:</label>
+        <select 
+          id="categoria-select"
+          class="categoria-select"
+          [value]="categoriaSeleccionada"
+          (change)="seleccionarCategoria($event)">
+          <option value="todas">📋 Todas</option>
+          <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
+        </select>
       </div>
 
       <!-- Acciones Derecha -->
@@ -42,7 +38,7 @@
         <!-- Usuario & Logout -->
         <div class="user-section">
           <span class="usuario-nombre" *ngIf="usuario">{{ usuario.nombre || usuario.email }}</span>
-          <button (click)="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
+          <button (click)="cerrarSesion()" class="btn-logout">Salir</button>
         </div>
       </div>
     </div>

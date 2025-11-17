@@ -68,30 +68,42 @@
   align-items: center;
 }
 
-.categoria-btn {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+.categoria-label {
+  font-weight: 600;
+  font-size: 0.95em;
   color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 0.9em;
-  transition: all 0.3s ease;
   white-space: nowrap;
 }
 
-.categoria-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
+.categoria-select {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95em;
+  transition: all 0.3s ease;
+  min-width: 160px;
 }
 
-.categoria-btn.active {
-  background: white;
-  color: #041e93;
-  font-weight: 700;
+.categoria-select:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.categoria-select:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.3);
   border-color: white;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+.categoria-select option {
+  background: #041e93;
+  color: white;
+  padding: 8px;
 }
 
 .navbar-actions {
@@ -207,12 +219,19 @@
     margin-bottom: 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     padding-bottom: 12px;
+    flex-direction: column;
   }
 
-  .categoria-btn {
-    flex: 1 1 calc(50% - 4px);
+  .categoria-label {
+    font-size: 0.9em;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .categoria-select {
+    width: 100%;
     padding: 10px 12px;
-    font-size: 0.85em;
+    font-size: 0.9em;
   }
 
   .navbar-actions {
@@ -260,7 +279,12 @@
     flex-direction: column;
   }
 
-  .categoria-btn {
-    flex: 1 1 100%;
+  .categoria-label {
+    font-size: 0.85em;
+  }
+
+  .categoria-select {
+    font-size: 0.85em;
+    padding: 8px 10px;
   }
 }

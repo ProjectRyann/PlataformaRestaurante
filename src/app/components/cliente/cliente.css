@@ -3,47 +3,6 @@
   background-color: #1e79a0;
 }
 
-.navbar {
-  background: linear-gradient(135deg, #041e93 0%, #764ba2 100%);
-  color: white;
-  padding: 15px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-brand h2 {
-  margin: 0;
-  font-size: 1.5em;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.usuario-nombre {
-  font-weight: 500;
-}
-
-.btn-logout {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid white;
-  color: white;
-  padding: 8px 15px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.btn-logout:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-}
-
 .content {
   max-width: 1200px;
   margin: 30px auto;
@@ -82,37 +41,46 @@
   margin-bottom: 20px;
 }
 
+.menu-filter-label {
+  font-size: 0.85em;
+  color: #667eea;
+  font-weight: 600;
+}
+
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
 }
 
 .menu-item {
-  background: linear-gradient(to bottom, white, #f9f9f9);
-  border-radius: 10px;
+  background: linear-gradient(to bottom, white, #fbfbfb);
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .menu-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.10);
 }
 
 .item-image {
-  height: 150px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3em;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, #f4f4f4 0%, #ffffff 100%);
 }
 
 .item-info {
-  padding: 15px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .item-info h3 {
@@ -157,27 +125,23 @@
 }
 
 .precio {
-  font-size: 1.3em;
-  font-weight: bold;
-  color: #667eea;
+  font-size: 1.15em;
+  font-weight: 700;
+  color: #3b6ad6;
 }
 
 .btn-agregar {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(90deg,#ff7a59,#ff4b5c);
   color: white;
   border: none;
   padding: 8px 12px;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 0.9em;
-  transition: all 0.3s ease;
+  font-weight: 700;
+  font-size: 0.95em;
 }
 
-.btn-agregar:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
+.btn-agregar:hover { transform: translateY(-2px); }
 
 .cart-section {
   background: white;

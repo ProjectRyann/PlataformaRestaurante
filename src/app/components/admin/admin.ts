@@ -33,7 +33,7 @@ export class AdminComponent implements OnInit {
     imagenUrl: undefined as string | undefined
   };
 
-  categorias = ['Bebidas', 'Platos fuertes', 'Postres'];
+  categorias = ['Bebidas', 'Platos fuertes', 'Postres', 'Entradas', 'Ensaladas'];
 
   // File upload state
   selectedFile: File | null = null;
