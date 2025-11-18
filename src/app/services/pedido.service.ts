@@ -9,6 +9,7 @@ export interface Pedido {
   total: number;
   fecha: Date;
   items: Array<Producto & { cantidad: number }>;
+  comentario?: { uid: string; texto: string; fecha: Date } | null;
 }
 
 @Injectable({
@@ -123,6 +124,19 @@ export class PedidoService {
       await deleteDoc(docRef);
     } catch (error) {
       console.error('Error al eliminar pedido:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Agrega un comentario a un pedido (solo un comentario por pedido)
+   */
+  async agregarComentarioPedido(id: string, comentario: { uid: string; texto: string; fecha: Date }): Promise<void> {
+    try {
+      const docRef = doc(this.firestore, this.pedidoCollection, id);
+      await updateDoc(docRef, { comentario });
+    } catch (error) {
+      console.error('Error al agregar comentario al pedido:', error);
       throw error;
     }
   }
