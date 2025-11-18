@@ -32,6 +32,9 @@ export class ClienteComponent implements OnInit {
 
   productoSeleccionado: Producto | null = null;
   mostrarModalDetalles = false;
+  // Para mostrar detalles de un pedido enviado
+  pedidoSeleccionado: Pedido | null = null;
+  mostrarModalPedido = false;
 
   constructor(
     private authService: AuthService,
@@ -145,10 +148,47 @@ export class ClienteComponent implements OnInit {
   }
 
   agregarComentario(pedidoId: string): void {
-    const comentario = prompt('Escribe tu comentario:');
-    if (comentario) {
-      alert(`✓ Comentario agregado: "${comentario}"`);
-    }
+    (async () => {
+      try {
+        const pedido = this.pedidos.find(p => p.id === pedidoId);
+        if (!pedido) {
+          alert('Pedido no encontrado');
+          return;
+        }
+
+        // Si ya existe un comentario, no permitir otro
+        if ((pedido as any).comentario) {
+          alert('Ya se dejó un comentario para este pedido');
+          return;
+        }
+
+        const texto = prompt('Escribe tu comentario:');
+        if (!texto) {
+          return;
+        }
+
+        if (!this.usuario) {
+          alert('Debes iniciar sesión para dejar un comentario');
+          return;
+        }
+
+        const nuevoComentario = {
+          uid: this.usuario.uid,
+          texto: texto,
+          fecha: new Date()
+        };
+
+        await this.pedidoService.agregarComentarioPedido(pedidoId, nuevoComentario);
+
+        // Actualizar pedido localmente para reflejar el comentario sin recargar todo
+        pedido.comentario = nuevoComentario as any;
+
+        alert(`✓ Comentario agregado: "${texto}"`);
+      } catch (error) {
+        console.error('Error al agregar comentario:', error);
+        alert('Error al agregar el comentario');
+      }
+    })();
   }
 
   async cerrarSesion(): Promise<void> {
@@ -171,5 +211,15 @@ export class ClienteComponent implements OnInit {
   cerrarDetalles(): void {
     this.mostrarModalDetalles = false;
     this.productoSeleccionado = null;
+  }
+
+  abrirDetallesPedido(pedido: Pedido): void {
+    this.pedidoSeleccionado = pedido;
+    this.mostrarModalPedido = true;
+  }
+
+  cerrarDetallesPedido(): void {
+    this.mostrarModalPedido = false;
+    this.pedidoSeleccionado = null;
   }
 }

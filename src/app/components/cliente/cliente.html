@@ -111,7 +111,37 @@
           <button (click)="agregarComentario(pedido.id)" class="btn-comentario">
             💬 Dejar comentario
           </button>
+          <button (click)="abrirDetallesPedido(pedido)" class="btn-detalles-pedido">
+            📄 Ver detalles
+          </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DETALLES PEDIDO -->
+  <div class="modal-overlay" *ngIf="mostrarModalPedido" (click)="cerrarDetallesPedido()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Pedido #{{ pedidoSeleccionado?.id }}</h2>
+        <button class="btn-cerrar" (click)="cerrarDetallesPedido()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Estado:</strong> <span [ngClass]="'status-' + pedidoSeleccionado?.estado">{{ pedidoSeleccionado?.estado }}</span></p>
+        <p><strong>Fecha:</strong> {{ pedidoSeleccionado?.fecha | date:'short' }}</p>
+        <h4>Items</h4>
+        <div class="pedido-items">
+          <div class="pedido-item" *ngFor="let it of pedidoSeleccionado?.items">
+            <span>{{ it.nombre }} x{{ it.cantidad }}</span>
+            <span class="subtotal">${{ (it.precio || 0) * it.cantidad }}</span>
+          </div>
+        </div>
+        <div class="pedido-total">
+          <strong>Total: ${{ pedidoSeleccionado?.total }}</strong>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="cerrarDetallesPedido()" class="btn-cerrar-modal">Cerrar</button>
       </div>
     </div>
   </div>
