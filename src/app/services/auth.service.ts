@@ -58,21 +58,26 @@ export class AuthService {
       .then(() => {
         this.verificarSesion();
       })
-      .catch((error) => console.error('Error al establecer persistencia:', error));
+      .catch((error) => {
+        console.error('Error al establecer persistencia:', error);
+        // Aún así verifica la sesión aunque falle la persistencia
+        this.verificarSesion();
+      });
   }
 
   /**
-   * Verifica si hay una sesión activa
+   * Verifica si hay una sesión activa y mantiene la persistencia
    */
   private verificarSesion(): void {
     this.auth.onAuthStateChanged(async (usuario) => {
       if (usuario) {
         const usuarioDatos = await this.obtenerDatosUsuario(usuario.uid);
         this.usuarioSubject.next(usuarioDatos);
+        this.cargandoSubject.next(false);
       } else {
         this.usuarioSubject.next(null);
+        this.cargandoSubject.next(false);
       }
-      this.cargandoSubject.next(false);
     });
   }
 

@@ -107,6 +107,13 @@
   line-height: 1;
 }
 
+.placeholder-icon {
+  font-size: 3em;
+  display: inline-block;
+  line-height: 1;
+  color: #ccc;
+}
+
 .categoria {
   margin: 0 0 8px 0;
   color: #999;
@@ -482,6 +489,13 @@
   font-size: 4em;
   display: inline-block;
   line-height: 1;
+}
+
+.placeholder-icon {
+  font-size: 3em;
+  display: inline-block;
+  line-height: 1;
+  color: #ccc;
 }
 
 .modal-info {

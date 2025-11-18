@@ -35,7 +35,7 @@ export class AdminComponent implements OnInit {
 
   categorias = ['Bebidas', 'Platos fuertes', 'Postres', 'Entradas', 'Ensaladas'];
 
-  // File upload state
+  
   selectedFile: File | null = null;
   selectedPreviewUrl?: string;
 

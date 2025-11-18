@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { filter, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -40,15 +41,21 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Si ya hay un usuario autenticado, redirigir
-    if (this.authService.obtenerUsuarioActual()) {
-      const rol = this.authService.obtenerRolActual();
-      if (rol === 'admin') {
-        this.router.navigate(['/admin']);
-      } else {
-        this.router.navigate(['/cliente']);
+    // Espera a que el servicio termine de verificar la sesión antes de redirigir
+    this.authService.cargando$.pipe(
+      filter(cargando => cargando === false),
+      take(1)
+    ).subscribe(() => {
+      const usuario = this.authService.obtenerUsuarioActual();
+      if (usuario) {
+        const rol = this.authService.obtenerRolActual();
+        if (rol === 'admin') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/cliente']);
+        }
       }
-    }
+    });
   }
 
   // No usamos Reactive Forms: template-driven con ngModel

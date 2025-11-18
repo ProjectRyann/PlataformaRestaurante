@@ -25,9 +25,9 @@
       <div class="menu-grid">
         <div class="menu-item" *ngFor="let producto of productosFiltered">
           <div class="item-image">
-            <img *ngIf="producto.imagenUrl; else emojiTpl" [src]="producto.imagenUrl" [alt]="producto.nombre" loading="lazy" />
-            <ng-template #emojiTpl>
-              <span class="emoji">{{ producto.imagen }}</span>
+            <img *ngIf="producto.imagenUrl; else placeholderTpl" [src]="producto.imagenUrl" [alt]="producto.nombre" loading="lazy" />
+            <ng-template #placeholderTpl>
+              <span class="placeholder-icon">🖼️</span>
             </ng-template>
           </div>
           <div class="item-info">
@@ -58,7 +58,7 @@
           <div class="modal-imagen">
             <img *ngIf="productoSeleccionado?.imagenUrl; else emojiModal" [src]="productoSeleccionado?.imagenUrl" [alt]="productoSeleccionado?.nombre" />
             <ng-template #emojiModal>
-              <span class="emoji-grande">{{ productoSeleccionado?.imagen }}</span>
+              <span class="placeholder-icon">🖼️</span>
             </ng-template>
           </div>
           <div class="modal-info">
