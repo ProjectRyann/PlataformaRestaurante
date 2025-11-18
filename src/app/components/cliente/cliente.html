@@ -22,6 +22,15 @@
           - {{ categoriaSeleccionada }}
         </span>
       </h2>
+      <div class="search-bar">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="aplicarFiltro()"
+          placeholder="Buscar por nombre o categoría"
+          class="search-input"
+        />
+      </div>
       <div class="menu-grid">
         <div class="menu-item" *ngFor="let producto of productosFiltered">
           <div class="item-image">
@@ -83,9 +92,18 @@
       <h2>Mi Carrito</h2>
       <div class="cart-items">
         <div class="cart-item" *ngFor="let item of carrito; let i = index">
-          <span>{{ item.nombre }} x{{ item.cantidad }}</span>
-          <span class="subtotal">${{ item.precio * item.cantidad }}</span>
-          <button (click)="eliminarDelCarrito(i)" class="btn-eliminar">Eliminar</button>
+          <div class="cart-item-left">
+            <span class="cart-item-name">{{ item.nombre }}</span>
+          </div>
+          <div class="cart-item-right">
+            <div class="qty-controls">
+              <button (click)="decrementarCantidad(item)" class="qty-btn">-</button>
+              <input type="number" [value]="item.cantidad" min="1" (change)="actualizarCantidad(item, $event.target.value)" class="qty-input" />
+              <button (click)="incrementarCantidad(item)" class="qty-btn">+</button>
+            </div>
+            <span class="subtotal">${{ item.precio * item.cantidad }}</span>
+            <button (click)="eliminarDelCarrito(i)" class="btn-eliminar">Eliminar</button>
+          </div>
         </div>
       </div>
       <div class="cart-total">

@@ -41,6 +41,19 @@
   margin-bottom: 20px;
 }
 
+.search-bar {
+  margin-bottom: 12px;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 420px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  font-size: 0.95em;
+}
+
 .menu-filter-label {
   font-size: 0.85em;
   color: #667eea;
@@ -401,6 +414,24 @@
   border-radius: 6px;
   border-left: 4px solid #4facfe;
 }
+
+/* Estilos para controles de cantidad en el carrito */
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: white;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.cart-item-left { flex: 1; }
+.cart-item-right { display: flex; gap: 12px; align-items: center; }
+.qty-controls { display: inline-flex; gap: 6px; align-items: center; }
+.qty-btn { background: #f0f0f0; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
+.qty-input { width: 64px; padding: 6px 8px; border-radius: 6px; border: 1px solid #ddd; text-align: center; }
 
 .pedido-total {
   display: flex;

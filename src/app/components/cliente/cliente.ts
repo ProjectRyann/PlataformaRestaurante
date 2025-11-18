@@ -23,6 +23,7 @@ export class ClienteComponent implements OnInit {
   usuario: Usuario | null = null;
   productos: Producto[] = [];
   productosFiltered: Producto[] = [];
+  searchTerm: string = '';
   carrito: CarritoItem[] = [];
   pedidos: Pedido[] = [];
   cargando = false;
@@ -73,14 +74,22 @@ export class ClienteComponent implements OnInit {
     this.aplicarFiltro();
   }
 
-  private aplicarFiltro(): void {
-    if (this.categoriaSeleccionada === 'todas') {
-      this.productosFiltered = [...this.productos];
-    } else {
-      this.productosFiltered = this.productos.filter(
-        p => p.categoria === this.categoriaSeleccionada
+  aplicarFiltro(): void {
+    const term = this.searchTerm?.trim().toLowerCase();
+    let list = this.productos;
+
+    if (this.categoriaSeleccionada !== 'todas') {
+      list = list.filter(p => p.categoria === this.categoriaSeleccionada);
+    }
+
+    if (term) {
+      list = list.filter(p =>
+        (p.nombre || '').toLowerCase().includes(term) ||
+        (p.categoria || '').toLowerCase().includes(term)
       );
     }
+
+    this.productosFiltered = [...list];
   }
 
   private async cargarPedidos(): Promise<void> {
@@ -105,6 +114,28 @@ export class ClienteComponent implements OnInit {
 
   eliminarDelCarrito(index: number): void {
     this.carrito.splice(index, 1);
+  }
+
+  actualizarCantidad(item: CarritoItem, value: string | number): void {
+    const n = Number(value);
+    if (isNaN(n) || n < 1) {
+      item.cantidad = 1;
+      return;
+    }
+    item.cantidad = Math.max(1, Math.floor(n));
+  }
+
+  incrementarCantidad(item: CarritoItem): void {
+    item.cantidad = (item.cantidad || 0) + 1;
+  }
+
+  decrementarCantidad(item: CarritoItem): void {
+    if (item.cantidad > 1) {
+      item.cantidad = item.cantidad - 1;
+    } else {
+      const idx = this.carrito.findIndex(it => it.id === item.id);
+      if (idx !== -1) this.eliminarDelCarrito(idx);
+    }
   }
 
   calcularTotal(): number {
