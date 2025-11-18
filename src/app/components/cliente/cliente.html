@@ -12,12 +12,12 @@
 
   <div class="content">
     <div class="welcome-section">
-      <h1>Bienvenido, {{ usuario?.nombre }}! 👋</h1>
+      <h1>Bienvenido, {{ usuario?.nombre }}!</h1>
       <p>Aquí puedes consultar el menú, hacer pedidos y seguir tu estado.</p>
     </div>
 
     <div class="menu-section">
-      <h2>📋 Menú
+      <h2>Menú
         <span class="menu-filter-label" *ngIf="categoriaSeleccionada !== 'todas'">
           - {{ categoriaSeleccionada }}
         </span>
@@ -27,7 +27,7 @@
           <div class="item-image">
             <img *ngIf="producto.imagenUrl; else placeholderTpl" [src]="producto.imagenUrl" [alt]="producto.nombre" loading="lazy" />
             <ng-template #placeholderTpl>
-              <span class="placeholder-icon">🖼️</span>
+              <span class="placeholder-icon">Imagen</span>
             </ng-template>
           </div>
           <div class="item-info">
@@ -36,10 +36,10 @@
             <p class="precio">${{ producto.precio }}</p>
             <div class="item-footer">
               <button (click)="abrirDetalles(producto)" class="btn-detalles">
-                ℹ️ Detalles
+                Detalles
               </button>
               <button (click)="agregarAlCarrito(producto)" class="btn-agregar">
-                🛒 Agregar
+                Agregar
               </button>
             </div>
           </div>
@@ -52,13 +52,13 @@
       <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
           <h2>{{ productoSeleccionado?.nombre }}</h2>
-          <button class="btn-cerrar" (click)="cerrarDetalles()">✕</button>
+          <button class="btn-cerrar" (click)="cerrarDetalles()">Cerrar</button>
         </div>
         <div class="modal-body">
           <div class="modal-imagen">
             <img *ngIf="productoSeleccionado?.imagenUrl; else emojiModal" [src]="productoSeleccionado?.imagenUrl" [alt]="productoSeleccionado?.nombre" />
             <ng-template #emojiModal>
-              <span class="placeholder-icon">🖼️</span>
+              <span class="placeholder-icon">Imagen</span>
             </ng-template>
           </div>
           <div class="modal-info">
@@ -70,7 +70,7 @@
         </div>
         <div class="modal-footer">
           <button (click)="agregarAlCarrito(productoSeleccionado!)" class="btn-agregar-modal">
-            🛒 Agregar al Carrito
+            Agregar al Carrito
           </button>
           <button (click)="cerrarDetalles()" class="btn-cerrar-modal">
             Cerrar
@@ -80,24 +80,24 @@
     </div>
 
     <div class="cart-section" *ngIf="carrito.length > 0" id="cart-section">
-      <h2>🛒 Mi Carrito</h2>
+      <h2>Mi Carrito</h2>
       <div class="cart-items">
         <div class="cart-item" *ngFor="let item of carrito; let i = index">
           <span>{{ item.nombre }} x{{ item.cantidad }}</span>
           <span class="subtotal">${{ item.precio * item.cantidad }}</span>
-          <button (click)="eliminarDelCarrito(i)" class="btn-eliminar">❌</button>
+          <button (click)="eliminarDelCarrito(i)" class="btn-eliminar">Eliminar</button>
         </div>
       </div>
       <div class="cart-total">
         <strong>Total: ${{ calcularTotal() }}</strong>
         <button (click)="confirmarPedido()" class="btn-confirmar">
-          ✓ Confirmar Pedido
+          Confirmar Pedido
         </button>
       </div>
     </div>
 
     <div class="orders-section">
-      <h2>📦 Mis Pedidos</h2>
+      <h2>Mis Pedidos</h2>
       <div class="orders-list">
         <div class="order-card" *ngFor="let pedido of pedidos">
           <div class="order-header">
@@ -109,10 +109,10 @@
           <p>Total: <strong>${{ pedido.total }}</strong></p>
           <p>Fecha: {{ pedido.fecha | date: 'short' }}</p>
           <button (click)="agregarComentario(pedido.id)" class="btn-comentario">
-            💬 Dejar comentario
+            Dejar comentario
           </button>
           <button (click)="abrirDetallesPedido(pedido)" class="btn-detalles-pedido">
-            📄 Ver detalles
+            Ver detalles
           </button>
         </div>
       </div>
@@ -124,7 +124,7 @@
     <div class="modal-content" (click)="$event.stopPropagation()">
       <div class="modal-header">
         <h2>Pedido #{{ pedidoSeleccionado?.id }}</h2>
-        <button class="btn-cerrar" (click)="cerrarDetallesPedido()">✕</button>
+        <button class="btn-cerrar" (click)="cerrarDetallesPedido()">Cerrar</button>
       </div>
       <div class="modal-body">
         <p><strong>Estado:</strong> <span [ngClass]="'status-' + pedidoSeleccionado?.estado">{{ pedidoSeleccionado?.estado }}</span></p>

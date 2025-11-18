@@ -29,7 +29,7 @@ export class AdminComponent implements OnInit {
     descripcion: '',
     precio: 0,
     categoria: 'Bebidas',
-    imagen: '🍽️',
+    imagen: '',
     imagenUrl: undefined as string | undefined
   };
 
@@ -99,7 +99,7 @@ export class AdminComponent implements OnInit {
       descripcion: '',
       precio: 0,
       categoria: 'Bebidas',
-      imagen: '🍽️',
+      imagen: '',
       imagenUrl: undefined
     };
     this.selectedFile = null;
@@ -157,11 +157,11 @@ export class AdminComponent implements OnInit {
           this.productoEnEdicion.id,
           datos
         );
-        alert('✓ Producto actualizado correctamente');
+        alert('Producto actualizado correctamente');
       } else {
         // Crear
         await this.productoService.crearProducto(datos);
-        alert('✓ Producto creado correctamente');
+        alert('Producto creado correctamente');
       }
       this.mostrarFormularioProducto = false;
       await this.cargarProductos();
@@ -210,7 +210,7 @@ export class AdminComponent implements OnInit {
       try {
         this.cargando = true;
         await this.productoService.eliminarProducto(id);
-        alert('✓ Producto eliminado correctamente');
+        alert('Producto eliminado correctamente');
         await this.cargarProductos();
       } catch (error) {
         console.error('Error al eliminar producto:', error);
@@ -229,7 +229,7 @@ export class AdminComponent implements OnInit {
       descripcion: '',
       precio: 0,
       categoria: 'Bebidas',
-      imagen: '🍽️',
+      imagen: '',
       imagenUrl: undefined
     };
   }
@@ -239,7 +239,7 @@ export class AdminComponent implements OnInit {
     try {
       await this.pedidoService.actualizarEstadoPedido(pedido.id, nuevoEstado);
       pedido.estado = nuevoEstado;
-      alert('✓ Estado del pedido actualizado');
+      alert('Estado del pedido actualizado');
     } catch (error) {
       console.error('Error al cambiar estado:', error);
       alert('Error al cambiar el estado del pedido');
@@ -268,10 +268,10 @@ export class AdminComponent implements OnInit {
 
   obtenerEtiquetaEstado(estado: Pedido['estado']): string {
     const etiquetas: { [key in Pedido['estado']]: string } = {
-      'pendiente': '⏳ Pendiente',
-      'en-preparacion': '👨‍🍳 En Preparación',
-      'listo': '✅ Listo',
-      'entregado': '🚚 Entregado'
+      'pendiente': 'Pendiente',
+      'en-preparacion': 'En Preparación',
+      'listo': 'Listo',
+      'entregado': 'Entregado'
     };
     return etiquetas[estado];
   }

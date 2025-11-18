@@ -2,7 +2,7 @@
   <div class="navbar-container">
     <!-- Logo / Brand -->
     <div class="navbar-brand">
-      <h2>🍽️ Sabor Criollo</h2>
+      <h2>Sabor Criollo</h2>
     </div>
 
     <!-- Menu Hamburguesa (Mobile) -->
@@ -22,7 +22,7 @@
           class="categoria-select"
           [value]="categoriaSeleccionada"
           (change)="seleccionarCategoria($event)">
-          <option value="todas">📋 Todas</option>
+          <option value="todas">Todas</option>
           <option *ngFor="let cat of categorias" [value]="cat">{{ cat }}</option>
         </select>
       </div>
@@ -31,7 +31,7 @@
       <div class="navbar-actions">
         <!-- Carrito -->
         <button class="cart-btn" (click)="clicCarrito()" [class.has-items]="cartCount > 0">
-          🛒 Carrito
+          Carrito
           <span *ngIf="cartCount > 0" class="cart-badge">{{ cartCount }}</span>
         </button>
 

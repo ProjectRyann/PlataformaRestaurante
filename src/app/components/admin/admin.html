@@ -1,7 +1,7 @@
 <div class="admin-container">
   <nav class="navbar">
     <div class="navbar-brand">
-      <h2>👨‍💼 Panel de Administrador</h2>
+      <h2>Panel de Administrador</h2>
     </div>
     <div class="user-info">
       <span class="usuario-nombre">{{ usuario?.nombre || usuario?.email }}</span>
@@ -16,19 +16,19 @@
         (click)="cambiarVista('dashboard')"
         [class.active]="vistaActual === 'dashboard'"
         class="nav-btn">
-        📊 Dashboard
+        Dashboard
       </button>
       <button 
         (click)="cambiarVista('productos')"
         [class.active]="vistaActual === 'productos'"
         class="nav-btn">
-        🍽️ Productos
+        Productos
       </button>
       <button 
         (click)="cambiarVista('pedidos')"
         [class.active]="vistaActual === 'pedidos'"
         class="nav-btn">
-        📦 Pedidos
+        Pedidos
       </button>
     </div>
 
@@ -36,14 +36,14 @@
     <div *ngIf="vistaActual === 'dashboard'" class="vista-section">
       <div class="welcome-section">
         <div class="welcome-card">
-          <h1>Bienvenido, {{ usuario?.nombre }}! 👋</h1>
+          <h1>Bienvenido, {{ usuario?.nombre }}!</h1>
           <p>Sistema de Administración - Sabor Criollo S.A.S</p>
         </div>
       </div>
 
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="stat-icon">🍽️</div>
+          <div class="stat-icon">Productos</div>
           <div class="stat-content">
             <h3>Total Productos</h3>
             <p class="stat-value">{{ obtenerTotalProductos() }}</p>
@@ -51,7 +51,7 @@
         </div>
 
         <div class="stat-card">
-          <div class="stat-icon">📦</div>
+          <div class="stat-icon">Pedidos</div>
           <div class="stat-content">
             <h3>Pedidos Hoy</h3>
             <p class="stat-value">{{ obtenerTotalPedidosHoy() }}</p>
@@ -59,7 +59,7 @@
         </div>
 
         <div class="stat-card">
-          <div class="stat-icon">💰</div>
+          <div class="stat-icon">Ventas</div>
           <div class="stat-content">
             <h3>Total Ventas</h3>
             <p class="stat-value">${{ obtenerTotalVentas() }}</p>
@@ -69,7 +69,7 @@
 
       <div class="charts-section">
         <div class="chart-card">
-          <h3>🏆 Productos Más Vendidos</h3>
+          <h3>Productos Más Vendidos</h3>
           <div class="chart-content">
             <div *ngIf="obtenerProductosMasVendidos().length > 0">
               <div *ngFor="let item of obtenerProductosMasVendidos()" class="chart-item">
@@ -88,13 +88,13 @@
 
     <!-- PRODUCTOS -->
     <div *ngIf="vistaActual === 'productos'" class="vista-section">
-      <div class="section-header">
-        <h2>🍽️ Gestión de Productos</h2>
+        <div class="section-header">
+        <h2>Gestión de Productos</h2>
         <button 
           (click)="abrirFormularioProducto()"
           [disabled]="cargando"
           class="btn-primary">
-          ➕ Nuevo Producto
+          Nuevo Producto
         </button>
       </div>
 
@@ -152,13 +152,13 @@
               (click)="guardarProducto()"
               [disabled]="cargando"
               class="btn-save">
-              {{ cargando ? '⏳ Guardando...' : '✓ Guardar' }}
+              {{ cargando ? 'Guardando...' : 'Guardar' }}
             </button>
             <button 
               (click)="cancelarFormulario()"
               [disabled]="cargando"
               class="btn-cancel">
-              ✕ Cancelar
+              Cancelar
             </button>
           </div>
         </div>
@@ -179,7 +179,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let producto of productos">
-              <td class="emoji-cell">
+                <td class="emoji-cell">
                 <img *ngIf="producto.imagenUrl" [src]="producto.imagenUrl" alt="{{producto.nombre}}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;" />
                 <span *ngIf="!producto.imagenUrl">{{ producto.imagen }}</span>
               </td>
@@ -191,13 +191,13 @@
                 <button 
                   (click)="editarProducto(producto)"
                   class="btn-sm btn-edit">
-                  ✏️ Editar
+                  Editar
                 </button>
                 <button 
                   (click)="eliminarProducto(producto.id)"
                   [disabled]="cargando"
                   class="btn-sm btn-delete">
-                  🗑️ Eliminar
+                  Eliminar
                 </button>
               </td>
             </tr>
@@ -210,7 +210,7 @@
     <!-- PEDIDOS -->
     <div *ngIf="vistaActual === 'pedidos'" class="vista-section">
       <div class="section-header">
-        <h2>📦 Gestión de Pedidos</h2>
+        <h2>Gestión de Pedidos</h2>
         <span class="badge">{{ pedidos.length }} Pedidos</span>
       </div>
 
@@ -240,7 +240,7 @@
             </ul>
           </div>
 
-          <div class="pedido-footer">
+            <div class="pedido-footer">
             <div>
               <strong>Total: ${{ pedido.total }}</strong>
             </div>
@@ -248,9 +248,9 @@
               *ngIf="pedido.estado !== 'entregado'"
               (click)="cambiarEstadoPedido(pedido, obtenerProximoEstado(pedido.estado))"
               class="btn-primary">
-              ➜ {{ obtenerEtiquetaEstado(obtenerProximoEstado(pedido.estado)) }}
+              {{ obtenerEtiquetaEstado(obtenerProximoEstado(pedido.estado)) }}
             </button>
-            <span *ngIf="pedido.estado === 'entregado'" class="badge-success">✓ Completado</span>
+            <span *ngIf="pedido.estado === 'entregado'" class="badge-success">Completado</span>
           </div>
         </div>
 

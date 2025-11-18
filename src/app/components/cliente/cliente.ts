@@ -135,7 +135,7 @@ export class ClienteComponent implements OnInit {
       };
 
       const pedidoId = await this.pedidoService.crearPedido(nuevoPedido);
-      alert(`✓ Pedido confirmado!\nID: ${pedidoId}\nTotal: $${total}\nEstado: Pendiente de preparación`);
+      alert(`Pedido confirmado!\nID: ${pedidoId}\nTotal: $${total}\nEstado: Pendiente de preparación`);
       
       this.carrito = [];
       await this.cargarPedidos();
@@ -183,7 +183,7 @@ export class ClienteComponent implements OnInit {
         // Actualizar pedido localmente para reflejar el comentario sin recargar todo
         pedido.comentario = nuevoComentario as any;
 
-        alert(`✓ Comentario agregado: "${texto}"`);
+        alert(`Comentario agregado: "${texto}"`);
       } catch (error) {
         console.error('Error al agregar comentario:', error);
         alert('Error al agregar el comentario');
